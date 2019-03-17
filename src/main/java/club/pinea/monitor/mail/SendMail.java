@@ -1,6 +1,6 @@
 package club.pinea.monitor.mail;
 
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.Message;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -17,7 +17,7 @@ public interface SendMail {
      * @param message
      * @return
      */
-    int sendMail(MimeMessage message);
+    int sendMail(Message message);
 
 
 }

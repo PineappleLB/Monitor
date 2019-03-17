@@ -1,8 +1,27 @@
 package club.pinea.monitor.mail.impl;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import club.pinea.monitor.mail.SendMail;
 
 import javax.mail.internet.MimeMessage;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Security;
+import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -14,10 +33,16 @@ import javax.mail.internet.MimeMessage;
  */
 public class SendMailImpl implements SendMail {
 
-
-
     @Override
-    public int sendMail(MimeMessage message) {
+    public int sendMail(Message message) {
+        try{
+            Transport.send(message);
+            return 1;
+            //TODO
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("发送成功！");
         return 0;
     }
 }
