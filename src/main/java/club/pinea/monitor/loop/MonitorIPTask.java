@@ -1,11 +1,16 @@
 package club.pinea.monitor.loop;
 
-import club.pinea.monitor.HTTPClientUtil;
+import club.pinea.monitor.mail.MailUtil;
+import club.pinea.monitor.mail.SendMail;
+import club.pinea.monitor.util.HTTPClientUtil;
 import club.pinea.monitor.config.RedisKeysConstants;
 import club.pinea.monitor.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import javax.mail.Session;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -21,13 +26,23 @@ public class MonitorIPTask {
     @Autowired
     private RedisService redisService;
 
+    @Autowired
+    private SendMail sendMail;
+
+    @Autowired
+    private Session session;
+
+    @Value("${spring.mail.sender}")
+    private String sender;
+
     @Scheduled(fixedRate = RedisKeysConstants.LOOP_TIME, initialDelay = 1000)
     public void loopIPtask(){
+        System.out.println("Monitoring ...");
         String dbIP = redisService.getLocalIp();
         String localIP = HTTPClientUtil.getLocalIP();
-        if(dbIP == null){
-
+        if(dbIP == null || !dbIP.equals(localIP)){
+            sendMail.sendMail(MailUtil.createMineMessage(sender, "2443755705@qq.com", "IP变更", localIP, session));
+            redisService.setLocalIp(localIP);
         }
     }
-
 }

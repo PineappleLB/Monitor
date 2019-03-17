@@ -13,6 +13,7 @@ public class RedisKeysConstants {
     // 本地ip地址
     public static final String LOCAL_IP_KEY = "localhost:ip";
 
-    public static final int LOOP_TIME = 1000 * 60 * 5;
+//    public static final int LOOP_TIME = 1000 * 60 * 5;
+    public static final int LOOP_TIME = 1000 * 30 * 1;
 
 }
