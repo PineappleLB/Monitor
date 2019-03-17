@@ -1,6 +1,7 @@
 package club.pinea.monitor.mail;
 
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import java.util.Date;
@@ -22,23 +23,28 @@ public class MailUtil {
      * @param receiver
      * @param title
      * @param content
-     * @param props
+     * @param session
      * @return
      */
     public static Message createMineMessage(String sender, String receiver, String title, String content, Session session) {
-        // 2.创建一个Message，它相当于是邮件内容
-        Message message = new MimeMessage(session);
+        try{
+            // 创建一个Message，它相当于是邮件内容
+            Message message = new MimeMessage(session);
 
-        message.setFrom(new InternetAddress(sender)); // 设置发送者
+            // 设置发送者
+            message.setFrom(new InternetAddress(sender));
 
-        message.setRecipient(RecipientType.TO, new InternetAddress(email)); // 设置发送方式与接收者
+            // 设置发送方式与接收者
+            message.setRecipient(RecipientType.TO, new InternetAddress(receiver));
 
-        message.setSubject(title);
-        // message.setText("这是一封激活邮件，请<a href='#'>点击</a>");
-
-        message.setContent(emailMsg);
-        message.setSentDate(new Date());
-        return message;
+            message.setSubject(title);
+            message.setContent(content, "text/html;charset=UTF-8");
+            message.setSentDate(new Date());
+            return message;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

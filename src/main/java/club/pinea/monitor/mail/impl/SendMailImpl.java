@@ -3,6 +3,7 @@ package club.pinea.monitor.mail.impl;
 import org.springframework.beans.factory.annotation.Value;
 
 import club.pinea.monitor.mail.SendMail;
+import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
 
@@ -31,18 +32,19 @@ import javax.mail.internet.MimeMessage.RecipientType;
  * @create 2019/3/17
  * @since 1.0.0
  */
+@Service
 public class SendMailImpl implements SendMail {
 
     @Override
     public int sendMail(Message message) {
         try{
             Transport.send(message);
+            System.out.println("发送成功！");
             return 1;
-            //TODO
         } catch(Exception e){
             e.printStackTrace();
         }
-        System.out.println("发送成功！");
         return 0;
     }
+
 }

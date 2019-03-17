@@ -1,6 +1,7 @@
 package club.pinea.monitor.mail;
 
-import javax.mail.internet.Message;
+
+import javax.mail.Message;
 
 /**
  * 〈一句话功能简述〉<br>

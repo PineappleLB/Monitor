@@ -1,5 +1,6 @@
 package club.pinea.monitor.config;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import redis.clients.jedis.Jedis;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.mail.internet.AddressException;
 
 import java.util.Properties;
@@ -27,22 +29,22 @@ public class ApplicationConfiguration {
     @Value("${spring.redis.ip}")
     private String redisIP;
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis.auth}")
     private String redisAuth;
 
-    @Value("spring.redis.port")
+    @Value("${spring.redis.port}")
     private Integer redisPort = 6379;
 
-    @Value("spring.mail.serverAddress")
+    @Value("${spring.mail.serverAddress}")
     private String serverAddress;
 
-    @Value("spring.mail.auth")
+    @Value("${spring.mail.auth}")
     private String emailAuth;
 
-    @Value("spring.mail.sender")
+    @Value("${spring.mail.sender}")
     private String sender;
 
-    @Value("spring.mail.user")
+    @Value("${spring.mail.user}")
     private String user;
 
     @Bean
@@ -56,33 +58,37 @@ public class ApplicationConfiguration {
 
     @Bean
     public Session emailSession() {
-        try {
+        try{
             Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-            final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+//        final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
             Properties props = new Properties();
 
             props.setProperty("mail.smtp.host", serverAddress);
-            props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+//        props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
             props.setProperty("mail.smtp.socketFactory.fallback", "false");
-            //       props.setProperty("mail.smtp.port", "587");
-            //       props.setProperty("mail.smtp.socketFactory.port", "587"); 上传到云服务器上要添加的代码
+            props.setProperty("mail.smtp.port", "465");
             props.setProperty("mail.smtp.auth", "true");
             props.setProperty("mail.transport.protocol", "SMTP");
 
+            MailSSLSocketFactory sf = new MailSSLSocketFactory();
+            sf.setTrustAllHosts(true);
+            props.put("mail.smtp.ssl.enable", "true");
+            props.put("mail.smtp.ssl.socketFactory", sf);
             // 创建验证器
-            Authenticator auth = () -> {
-                //发送邮件的用户名     发送邮件的授权码
-                return new PasswordAuthentication(user, emailAuth);
+            Authenticator auth = new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    //发送邮件的用户名     发送邮件的授权码
+                    return new PasswordAuthentication(user, emailAuth);
+                }
             };
             Session session = Session.getInstance(props, auth);
             return session;
             //TODO
-        } catch (MessagingException e) {
-            //TODO e
-            return null;
-        } catch (AddressException e) {
+        } catch(Exception e){
             return null;
         }
+
     }
 
 }
