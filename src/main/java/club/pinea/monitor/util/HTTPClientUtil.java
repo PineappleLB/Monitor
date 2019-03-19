@@ -1,4 +1,4 @@
-package club.pinea.monitor;
+package club.pinea.monitor.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
