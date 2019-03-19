@@ -35,13 +35,18 @@ public class MonitorIPTask {
     @Value("${spring.mail.sender}")
     private String sender;
 
+    @Value("${spring.mail.receivers}")
+    private String receivers;
+
     @Scheduled(fixedRate = RedisKeysConstants.LOOP_TIME, initialDelay = 1000)
     public void loopIPtask(){
         System.out.println("Monitoring ...");
         String dbIP = redisService.getLocalIp();
         String localIP = HTTPClientUtil.getLocalIP();
         if(dbIP == null || !dbIP.equals(localIP)){
-            sendMail.sendMail(MailUtil.createMineMessage(sender, "2443755705@qq.com", "IP变更", localIP, session));
+            for (String receiver: receivers.split(",")) {
+                sendMail.sendMail(MailUtil.createMineMessage(sender, receiver, "IP变更", localIP, session));
+            }
             redisService.setLocalIp(localIP);
         }
     }
