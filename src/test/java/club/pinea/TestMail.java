@@ -40,9 +40,10 @@ public class TestMail {
     @Autowired
     private SendMail sendMail;
 
-//    @Test
-//    public void testSendMail(){
+    @Test
+    public void testSendMail(){
 //        sendMail.sendMail(MailUtil.createMineMessage(sender, "2443755705@qq.com", "IP变更", "120.79.29.207", session));
-//    }
+        System.out.println(1);
+    }
 
 }
