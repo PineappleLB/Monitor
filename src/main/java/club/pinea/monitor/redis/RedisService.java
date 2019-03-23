@@ -40,4 +40,6 @@ public interface RedisService {
      */
     String getLocalIp(RedisCallBack callBack);
 
+    int saveUpdateLog(String log);
+
 }

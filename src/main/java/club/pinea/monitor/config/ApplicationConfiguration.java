@@ -60,11 +60,9 @@ public class ApplicationConfiguration {
     public Session emailSession() {
         try{
             Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-//        final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
             Properties props = new Properties();
 
             props.setProperty("mail.smtp.host", serverAddress);
-//        props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
             props.setProperty("mail.smtp.socketFactory.fallback", "false");
             props.setProperty("mail.smtp.port", "465");
             props.setProperty("mail.smtp.auth", "true");

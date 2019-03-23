@@ -45,4 +45,10 @@ public class RedisServiceImpl implements RedisService {
         callBack.callback(result, result == null ? 0 : 1);
         return result;
     }
+
+    @Override
+    public int saveUpdateLog(String log) {
+        Long res = jedis.lpush(RedisKeysConstants.UPDATE_IP_LOG_KEY, log);
+        return res > 0 ? 1 : 0;
+    }
 }

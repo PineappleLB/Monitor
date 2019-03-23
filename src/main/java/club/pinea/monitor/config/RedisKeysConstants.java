@@ -16,4 +16,9 @@ public class RedisKeysConstants {
 //    public static final int LOOP_TIME = 1000 * 60 * 5;
     public static final int LOOP_TIME = 1000 * 30 * 1;
 
+    // 修改绑定域名的IP地址的地址
+    public static final String UPDATE_DOMAIN_IP_URL = "https://dnsapi.cn/Record.Modify";
+
+    public static final String UPDATE_IP_LOG_KEY = "localhost:log";
+
 }

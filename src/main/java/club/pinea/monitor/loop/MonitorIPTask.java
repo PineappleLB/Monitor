@@ -26,17 +26,20 @@ public class MonitorIPTask {
     @Autowired
     private RedisService redisService;
 
-    @Autowired
-    private SendMail sendMail;
+//    @Autowired
+//    private SendMail sendMail;
+//
+//    @Autowired
+//    private Session session;
+
+//    @Value("${spring.mail.sender}")
+//    private String sender;
+//
+//    @Value("${spring.mail.receivers}")
+//    private String receivers;
 
     @Autowired
-    private Session session;
-
-    @Value("${spring.mail.sender}")
-    private String sender;
-
-    @Value("${spring.mail.receivers}")
-    private String receivers;
+    private UpdateDomainRecordService updateDomainRecordService;
 
     @Scheduled(fixedRate = RedisKeysConstants.LOOP_TIME, initialDelay = 1000)
     public void loopIPtask(){
@@ -44,9 +47,10 @@ public class MonitorIPTask {
         String dbIP = redisService.getLocalIp();
         String localIP = HTTPClientUtil.getLocalIP();
         if(dbIP == null || !dbIP.equals(localIP)){
-            for (String receiver: receivers.split(",")) {
-                sendMail.sendMail(MailUtil.createMineMessage(sender, receiver, "IP变更", localIP, session));
-            }
+//            for (String receiver: receivers.split(",")) {
+//                sendMail.sendMail(MailUtil.createMineMessage(sender, receiver, "IP变更", localIP, session));
+//            }
+            updateDomainRecordService.updateDomainRecordByHome(localIP);
             redisService.setLocalIp(localIP);
         }
     }

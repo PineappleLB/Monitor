@@ -22,7 +22,6 @@ import javax.mail.Session;
 @SpringBootTest(classes = Application.class)
 public class TestMail {
 
-
     @Value("${spring.mail.serverAddress}")
     private String serverAddress;
 
