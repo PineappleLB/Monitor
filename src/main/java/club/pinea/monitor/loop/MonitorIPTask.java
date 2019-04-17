@@ -24,7 +24,7 @@ import javax.mail.Session;
 public class MonitorIPTask {
 
     @Autowired
-    private RedisService redisService;
+    private RedisService redisServiceImpl;
 
 //    @Autowired
 //    private SendMail sendMail;
@@ -44,14 +44,14 @@ public class MonitorIPTask {
     @Scheduled(fixedRate = RedisKeysConstants.LOOP_TIME, initialDelay = 1000)
     public void loopIPtask(){
         System.out.println("Monitoring ...");
-        String dbIP = redisService.getLocalIp();
+        String dbIP = redisServiceImpl.getLocalIp();
         String localIP = HTTPClientUtil.getLocalIP();
         if(dbIP == null || !dbIP.equals(localIP)){
 //            for (String receiver: receivers.split(",")) {
 //                sendMail.sendMail(MailUtil.createMineMessage(sender, receiver, "IP变更", localIP, session));
 //            }
             updateDomainRecordService.updateDomainRecordByHome(localIP);
-            redisService.setLocalIp(localIP);
+            redisServiceImpl.setLocalIp(localIP);
         }
     }
 }
